@@ -1,6 +1,5 @@
 package com.srilankagem.gembackend.gem.models;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,8 +7,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "gemstones")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class GemStone {
 
@@ -17,7 +18,7 @@ public class GemStone {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false ,unique = true)
+    @Column(nullable = false, unique = true)
     private String gemCode;
 
     @Column(nullable = false)
@@ -49,9 +50,13 @@ public class GemStone {
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean certified;
+    private boolean certified = false;
 
-    @Column(nullable = false , updatable = false)
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean active = true;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column
@@ -62,7 +67,7 @@ public class GemStone {
         this.createdAt = LocalDateTime.now();
     }
 
-    @PrePersist
+    @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
