@@ -4,6 +4,7 @@ import com.srilankagem.gembackend.common.exception.DuplicateResourceException;
 import com.srilankagem.gembackend.common.exception.ResourceNotFoundException;
 import com.srilankagem.gembackend.gem.dto.CertificateRequest;
 import com.srilankagem.gembackend.gem.dto.CertificateResponse;
+import com.srilankagem.gembackend.gem.dto.GemStoneResponse;
 import com.srilankagem.gembackend.gem.models.Certificate;
 import com.srilankagem.gembackend.gem.models.GemStone;
 import com.srilankagem.gembackend.gem.repository.CertificateRepo;
@@ -56,7 +57,7 @@ public class CertificateService {
                 .remarks(request.getRemarks())
                 .build();
 
-        return toResponse(certificate);
+        return toResponse(certificateRepo.save(certificate));
     }
 
     private CertificateResponse toResponse(Certificate cert) {
@@ -72,5 +73,11 @@ public class CertificateService {
                 .remarks(cert.getRemarks())
                 .createdAt(cert.getCreatedAt())
                 .build();
+    }
+
+    public CertificateResponse getCertificateById(Long id) throws ResourceNotFoundException {
+        return toResponse(certificateRepo.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("certificate" , id.toString())
+        ));
     }
 }
