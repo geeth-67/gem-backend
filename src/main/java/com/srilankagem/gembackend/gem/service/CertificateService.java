@@ -1,9 +1,13 @@
 package com.srilankagem.gembackend.gem.service;
 
 import com.srilankagem.gembackend.common.exception.DuplicateResourceException;
+import com.srilankagem.gembackend.common.exception.ResourceNotFoundException;
 import com.srilankagem.gembackend.gem.dto.CertificateRequest;
+import com.srilankagem.gembackend.gem.dto.CertificateResponse;
+import com.srilankagem.gembackend.gem.models.Certificate;
+import com.srilankagem.gembackend.gem.models.GemStone;
 import com.srilankagem.gembackend.gem.repository.CertificateRepo;
-import jakarta.validation.constraints.Null;
+import com.srilankagem.gembackend.gem.repository.GemStoneRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,20 +15,62 @@ import org.springframework.stereotype.Service;
 public class CertificateService {
 
     private final CertificateRepo certificateRepo;
+    private final GemStoneRepo gemStoneRepo;
 
     @Autowired
-    public CertificateService(CertificateRepo certificateRepo) {
+    public CertificateService(CertificateRepo certificateRepo , GemStoneRepo gemStoneRepo, GemStoneRepo gemStoneRepo1) {
         this.certificateRepo = certificateRepo;
+        this.gemStoneRepo = gemStoneRepo;
     }
 
-    public CertificateRepo createCertificate(CertificateRequest request) {
+    public CertificateResponse createCertificate(CertificateRequest request) {
 
         if (certificateRepo.existsByCertificateNumber(request.getCertificateNumber())) {
-            throw new DuplicateResourceException("Certificate with" + request.getCertificateNumber() + "this number already exists");
+            throw new DuplicateResourceException(
+                    "Certificate with number " +
+                            request.getCertificateNumber() +
+                            " already exists");
         }
+
         if (certificateRepo.existsByGemStoneId(request.getGemId())) {
-            throw new DuplicateResourceException("Certificate with" + request.getGemId() + "already exists");
+            throw new DuplicateResourceException(
+                    "Certificate for gem " +
+                            request.getGemId() +
+                            " already exists");
         }
-        return null;
+
+        GemStone stone = gemStoneRepo.findById(request.getGemId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Gem",
+                                request.getGemId().toString()
+                        )
+                );
+
+        Certificate certificate = Certificate.builder()
+                .certificateNumber(request.getCertificateNumber())
+                .gemStone(stone)
+                .issuedBy(request.getIssuedBy())
+                .issuedDate(request.getIssueDate())
+                .expiryDate(request.getExpiryDate())
+                .remarks(request.getRemarks())
+                .build();
+
+        return toResponse(certificate);
+    }
+
+    private CertificateResponse toResponse(Certificate cert) {
+        return CertificateResponse
+                .builder()
+                .id(cert.getId())
+                .certificateNumber(cert.getCertificateNumber())
+                .gemId(cert.getGemStone().getId())
+                .gemCode(cert.getGemStone().getGemCode())
+                .issuedBy(cert.getIssuedBy())
+                .issuedDate(cert.getIssuedDate())
+                .expiryDate(cert.getExpiryDate())
+                .remarks(cert.getRemarks())
+                .createdAt(cert.getCreatedAt())
+                .build();
     }
 }
