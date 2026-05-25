@@ -3,7 +3,6 @@ package com.srilankagem.gembackend.gem.controller;
 import com.srilankagem.gembackend.gem.dto.GemStoneRequest;
 import com.srilankagem.gembackend.gem.dto.GemStoneResponse;
 import com.srilankagem.gembackend.gem.service.GemStoneService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +38,12 @@ public class GemStoneController {
                 .body(gemStoneService.createGemStone(request));
     }
 
-    @GetMapping
-    public ResponseEntity<GemStoneResponse> getGemStoneById(@PathVariable Long id) {
-        return ResponseEntity.ok(gemStoneService.getGemShoneById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<GemStoneResponse> getGemStoneById(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(
+                gemStoneService.getGemShoneById(id)
+        );
     }
 }
