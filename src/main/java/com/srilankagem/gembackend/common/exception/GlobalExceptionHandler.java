@@ -22,16 +22,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleExceptionNotFound(ResourceNotFoundException ex , HttpServletRequest request) {
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateResource(DuplicateResourceException ex , HttpServletRequest request) {
 
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Resource not found")
+                .status(HttpStatus.CONFLICT.value())
+                .error("Duplicate Error")
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }
