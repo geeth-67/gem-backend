@@ -3,6 +3,7 @@ package com.srilankagem.gembackend.gem.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +30,10 @@ public class GemStone {
     private String color;
 
     @Column(nullable = false)
-    private Double caratWeight;
+    private BigDecimal caratWeight;
+
+    @OneToOne(mappedBy = "gemStone" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private Certificate certificate;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -40,7 +44,7 @@ public class GemStone {
     private GemTreatment treatment;
 
     @Column
-    private Double pricePerCarat;
+    private BigDecimal pricePerCarat;
 
     @Column(nullable = false)
     private Integer stockQuantity;
