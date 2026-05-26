@@ -77,7 +77,7 @@ public class CertificateService {
 
     public CertificateResponse getCertificateById(Long id) throws ResourceNotFoundException {
         return toResponse(certificateRepo.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("certificate" , id.toString())
+                () -> new ResourceNotFoundException("resource not found" , id.toString())
         ));
     }
 }
