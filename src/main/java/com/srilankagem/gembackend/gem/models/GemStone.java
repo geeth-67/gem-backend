@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "gemstones")
@@ -42,6 +44,14 @@ public class GemStone {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private GemTreatment treatment;
+
+    @ManyToMany
+    @JoinTable(
+            name = "gemstone_tags",
+            joinColumns = @JoinColumn(name = "gemstone_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     @Column
     private BigDecimal pricePerCarat;
