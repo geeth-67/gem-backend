@@ -4,7 +4,6 @@ import com.srilankagem.gembackend.common.exception.DuplicateResourceException;
 import com.srilankagem.gembackend.common.exception.ResourceNotFoundException;
 import com.srilankagem.gembackend.gem.dto.CertificateRequest;
 import com.srilankagem.gembackend.gem.dto.CertificateResponse;
-import com.srilankagem.gembackend.gem.dto.GemStoneResponse;
 import com.srilankagem.gembackend.gem.models.Certificate;
 import com.srilankagem.gembackend.gem.models.GemStone;
 import com.srilankagem.gembackend.gem.repository.CertificateRepo;
