@@ -1,5 +1,6 @@
 package com.srilankagem.gembackend.trade.entity;
 
+import com.srilankagem.gembackend.dealer.models.Dealer;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,6 +41,10 @@ public class Trade {
 
     @Column(length = 500)
     private String shippingAddress;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dealer_id" , nullable = false)
+    private Dealer dealer;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
