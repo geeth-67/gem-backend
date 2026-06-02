@@ -46,6 +46,10 @@ public class TagService {
         return toResponse(tag);
     }
 
+    public Tag getTagEntityById(Long tagId) {
+        return tagRepo.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(tagId.toString() , "resource not found"));
+    }
+
     public Page<TagResponse> getAllTags(
             int page,
             int size
