@@ -1,11 +1,14 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: gembackend
 
   datasource:
-    url: jdbc:h2:mem:gemdb
-    username: admin
-    password:
+    url: jdbc:postgresql://localhost:5434/gem_db
+    username: gem
+    password: gem123
 
   h2:
     console:
@@ -14,8 +17,5 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
-
-server:
-  port: 8081

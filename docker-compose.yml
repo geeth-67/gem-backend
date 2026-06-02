@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: gem_db
+      POSTGRES_USER: gem
+      POSTGRES_PASSWORD: gem123
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gem -d gem_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gem-trading:
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gem_db
+      SPRING_DATASOURCE_USERNAME: gem
+      SPRING_DATASOURCE_PASSWORD: gem123
